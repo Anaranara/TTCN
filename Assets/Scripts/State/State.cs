@@ -1,0 +1,1 @@
+public enum CharState { RUN, JUMP, FALL, SLIDE, IDLE}
