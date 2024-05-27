@@ -24,9 +24,6 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
-
-    
-
     public void Start()
     {
         coins = 0;
@@ -67,8 +64,13 @@ public class GameManager : MonoBehaviour
                 break;
             }
         }
+        ProgressContain.HighScore.Sort((a, b) => b.CompareTo(a));
         float[] scored = new float[10];
         scored = ProgressContain.HighScore.ToArray();
+        foreach (var r in scored)
+        {
+            Debug.Log(r);
+        }
         StatsManager.SaveFloatArray("Scores", scored);
     }
 

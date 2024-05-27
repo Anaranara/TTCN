@@ -19,7 +19,7 @@ public class Other : MonoBehaviour
 
     IEnumerator Kill()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(8f);
         Destroy(terr);
     }
 

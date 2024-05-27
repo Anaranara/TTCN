@@ -12,7 +12,6 @@ public class StatsManager : MonoBehaviour
 
     private void Start()
     {
-
         Initiatescore();
         updateboardfromprefs();
         SaveFloatArray("Scores",scores);
@@ -37,6 +36,11 @@ public class StatsManager : MonoBehaviour
     private void Initiatescore()
     {
         scores = LoadFloatArray("Scores");
+        Debug.Log("Scores ---- ");
+        foreach(var r in scores)
+        {
+            Debug.Log(r);
+        }
         if (scores.Length > 5)
         {
             float[] nA = new float[5];
@@ -46,6 +50,11 @@ public class StatsManager : MonoBehaviour
         ProgressContain.HighScore = new List<float>();
         ProgressContain.HighScore.AddRange(scores);
         ProgressContain.HighScore.Sort((a, b) => b.CompareTo(a));
+        Debug.Log("-------------");
+        foreach(var e in ProgressContain.HighScore)
+        {
+            Debug.Log(e);
+        }
     }
 
     //update so luong item tu playerprefs sau khi bat lai game

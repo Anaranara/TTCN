@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerHealthsystem : MonoBehaviour
 {
     public int currhealth;
-    public int maxhealth = 25;
+    public int maxhealth;
     private bool immo;
     private float immotime = 2f;
     private float immotimer;
@@ -15,33 +13,36 @@ public class PlayerHealthsystem : MonoBehaviour
 
     public Slider fillhp;
     [SerializeField] private float blink = 0.1f;
+    [SerializeField] private TextMeshProUGUI HP;
 
     private SpriteRenderer sp;
 
+    // buff
+    BuffHp buffHp;
+    BuffHeal buffHeal;
+
     void Start()
     {
+        buffHp = BuffDataManager.LoadBuffHpData();
+        buffHeal = BuffDataManager.LoadBuffHealData(); 
+        maxhealth = buffHp.hpMax;
+        currhealth = maxhealth;
         fillhp.maxValue = maxhealth;
-        fillhp.value = maxhealth;
+        fillhp.value = currhealth;
         sp = GetComponent<SpriteRenderer>();
-        if (ProgressContain.Hpincreaseitem == 0)
-        {
-            currhealth = maxhealth;
-        }
-        else if(ProgressContain.Hpincreaseitem >= 1)
-        {
-            currhealth = maxhealth + 10;
-            ProgressContain.Hpincreaseitem -= 1;
-            StatsManager.SaveInteger("item1",ProgressContain.Hpincreaseitem);
-        }
-        Debug.Log(currhealth);
+
+        // healing hp per 5s
+        InvokeRepeating(nameof(Healing), 5, 5);
     }
     private void Update()
     {
+
+        HP.text = currhealth + "/" + maxhealth;
         if (immo && !Playergamesystem.Instance.isdead)
         {
             immotimer -= Time.deltaTime;
             blinktimer -= Time.deltaTime;
-            if(blinktimer <= 0)
+            if (blinktimer <= 0)
             {
                 sp.enabled = !sp.enabled;
                 blinktimer = blink;
@@ -52,15 +53,16 @@ public class PlayerHealthsystem : MonoBehaviour
                 sp.enabled = true;
             }
         }
-        else if(Playergamesystem.Instance.isdead)
+        else if (Playergamesystem.Instance.isdead)
         {
+            currhealth = 0;
             fillhp.value = 0;
         }
     }
 
     public void healthchange(int amount)
     {
-        if(amount < 0)
+        if (amount < 0)
         {
             if (immo)
                 return;
@@ -74,9 +76,16 @@ public class PlayerHealthsystem : MonoBehaviour
             currhealth = Mathf.Clamp(currhealth + amount, 0, maxhealth);
             fillhp.value = currhealth;
         }
-        if(currhealth == 0)
+        if (currhealth == 0)
         {
             Playergamesystem.Instance.isdead = true;
         }
+    }
+
+    private void Healing()
+    {
+        if (currhealth == maxhealth) return;
+        currhealth = Mathf.Min(currhealth + buffHeal.healHpPer5s, maxhealth);
+        fillhp.value = currhealth;
     }
 }

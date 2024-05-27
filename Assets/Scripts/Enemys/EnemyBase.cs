@@ -18,7 +18,8 @@ public class EnemyBase : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         ani = GetComponent<Animator>();
         colli = GetComponent<Collider2D>();
-        Invoke(nameof(ReleaseObj), 30f);
+        Transform t = rb.transform;
+        Invoke(nameof(ReleaseObj), 12f);
         milestone = Playermove.Speedmilestone;
     }
 

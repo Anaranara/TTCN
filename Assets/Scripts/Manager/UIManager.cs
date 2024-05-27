@@ -15,6 +15,7 @@ public class Ui : MonoBehaviour
     [SerializeField] private float Timer = 0.5f;
 
     private bool paused = false;
+    PlayerHealthsystem phs;
     GameManager gm;
     private void Start()
     {

@@ -41,7 +41,7 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
-        if (gm.isplay)
+        if (!Playergamesystem.Instance.isdead)
         {
             SpawnEnemy();
         }

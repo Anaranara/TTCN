@@ -1,16 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Damagezone : MonoBehaviour
 {
     void OnTriggerEnter2D(Collider2D other)
     {
-        PlayerHealthsystem dmg = other.GetComponent<PlayerHealthsystem>();
+        PlayerHealthsystem phs = other.GetComponent<PlayerHealthsystem>();
 
-        if (dmg != null)
+        if (phs != null)
         {
-            dmg.healthchange(-5);
+            int dmg = 10; // mac dinh gay 10 st
+            int dmgToPlayer = Mathf.RoundToInt(dmg * (1 - BuffDataManager.LoadBuffArmorData().reduceDmg));
+            phs.healthchange(-dmgToPlayer);
+            Debug.Log($"{phs.currhealth}/{phs.maxhealth}");
         }
     }
 }
